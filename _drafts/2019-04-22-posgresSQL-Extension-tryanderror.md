@@ -67,6 +67,7 @@ makefile:7: Files/PostgreSQL/11/lib/pgxs/src/makefiles/pgxs.mk: No such file or 
 mingw32-make: *** No rule to make target 'Files/PostgreSQL/11/lib/pgxs/src/makefiles/pgxs.mk'.  Stop.
 ```
 
+문제는 pgxs를 window에서 지원하지 않아서 발생했다. 앞선 예제들과 달리 window버전의 postgreSQL은 pgxs를 설치하지 않는다.
 왜 linux가 아니어서...
 
 그래서 방법을 바꾸어 window로 extension을 만드는 법을 검색했다.
@@ -77,9 +78,18 @@ mingw32-make: *** No rule to make target 'Files/PostgreSQL/11/lib/pgxs/src/makef
 visual studio code에 익숙치 않다보니 빌드에도 많은 시행착오가 있다. 우선 build시 control+shift+B를 통해 task.json 파일을 생성한다. 그리고 해당 파일을 수정하여 원하는 방식으로 조절해야하는 데, dll파일을 참조할 주소가 제대로 먹히지 않는다. 구글링 결과 [github에 비슷한 질문](https://github.com/Microsoft/vscode-cpptools/issues/1889)이 있다. 해당 글에선 task의 args에 넣거나 더 좋은 방법으로는 .sh나 .cmd를 사용하는 걸 추천한다. pgRouting도 sh(쉘 스크립트)로 선언되어있으니 sh를 좀 찾아봐야할 것 같다.
 
 ~~아니면 visual code에 c++ 확장 기능을 설치해서 프로젝트를 선언해보는 방법도 있을 것 같다.~~ pgRouting에서 window 환경에서 실행하거나 설치하는 스크립트 파일을 찾아보았다. 하지만 별로 도움이 되지 않는다.
-결국 다시 sh에서 사용하는 방법을 찾아보아야.
+결국 다시 sh에서 사용하는 방법을 찾아보아야. 스크립트랑 bash에 관해서는 [이 블로그](https://blog.gaerae.com/2015/01/bash-hello-world.html)를 참고하는 게 좋을 것 같다.
 
 makefile을 비롯해 compile 전반에 대한 이해가 부족해서, 몇 시간 동안 구글링 해봤지만 계속 included path를 찾지 못한 문제가 나타났다. [이 문서](https://devblogs.microsoft.com/cppblog/building-your-c-application-with-visual-studio-code/#Makefiles)를 정독하면 가능할 것 같긴 한데, 다른 방법을 찾는 게 맞을 지 고민된다.
 
 2019.04.22 3:55 우선 vs code에서 dll을 릴리즈 하는 건 보류하기로 했다. 또 mac os에서 extension만 만들어서 가져오는 방법은 제대로 되지 않았다.
 visual studio 에서 build 작업을 하기로 하고, 라이선스 받는 동안 vs code에서 RAPTOR를 C/C++로 구현해야겠다.
+
+## 봤던 링크
+
+[마이크로소프트 visualstudio task](https://code.visualstudio.com/docs/editor/tasks#vscode)
+[마이크로소프트 docs build에 관한 내용](https://docs.microsoft.com/ko-kr/visualstudio/ide/customize-build-and-debug-tasks-in-visual-studio?view=vs-2019)
+[window 환경에서 pgRouting build 하기](http://pgrouting.org/docs/howto/build_on_windows.html) 이해가 안됨
+[pgRouting github wiki](https://github.com/pgRouting/pgrouting/wiki) 도움이 되진 않았다.
+[g++ 이용시 args 목록 및 예제](https://cets.seas.upenn.edu/answers/gcc.html)
+[gcc 사용에 관한 한글 설명 및 예제](https://wiki.kldp.org/KoreanDoc/html/gcc_and_make/gcc_and_make-2.html) 설명과 예제가 자세하게 되어있지만, 활용할 순 없었다.
