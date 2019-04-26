@@ -19,11 +19,17 @@ SELECT pg_dijkstra()
 
 QGIS를 켜서 확인해봅시다.
 
-QGIS에서 구축한 link 테이블을 연결하고
-필터에 다음 구문을 넣어 맞게 움직이는 지 봅시다.
+QGIS에서 구축한 link 테이블을 연결하고, 필터에 다음 구문을 넣어 맞게 움직이는 지 봅시다.
 
 ```sql
-
+"gid" IN ( SELECT id2 AS gid FROM pgr_dijkstra('
+                SELECT gid AS id,
+                         source::integer,
+                         target::integer,
+                         length::double precision AS cost
+                        FROM link',
+                30, 60, false, false) a LEFT JOIN link b ON (a.id2 = b.gid)
+)
 ```
 
 적당히 넣어 봤더니 그러저럭 잘 되는 것 같습니다.
@@ -40,7 +46,7 @@ QGIS에서 구축한 link 테이블을 연결하고
 
 설치가 끝나면 start geoserver를 실행하여 geoserver를 실행하고, geoadmin을 실행하여 관리자 모드로 들어갑니다.
 
-아마 admin의 이름과 비밀번호를 바꾸지 않았다면, 입니다.
+기본 관리자 id는 admin, password는 geoserver입니다.
 
 로그인 한 뒤에 다음을 따라서 수행하면 서버에서 데이터를 내보낼 준비가 끝났습니다.
 
@@ -48,9 +54,101 @@ QGIS에서 구축한 link 테이블을 연결하고
 
 이제 간단한 웹페이지를 만들어 link에서 찾은 경로를 지도에 띄워봅니다.
 
-html은 osm3를 이용합니다. 참고는 [서울 버전 pgRouting 예제]()를 참고하였습니다. 다만 해당 소스는 구버전을 기준으로 작성되어있어 실제로 작동하지 않는 부분이 많아 부분적으로 수정하였습니다.
+html은 osm3를 이용합니다. 이 문서는 [서울 버전 pgRouting 예제]()를 많이 참고하였습니다. 다만 해당 소스는 구버전을 기준으로 작성되어있어 실제로 작동하지 않는 부분이 많아 부분적으로 수정하였습니다.
 
 ```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ol3 pgRouting client</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <style>
+      #ol-map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+  </head>
+  <body>
+    <div id="ol-map">
+        <div id="start-point">start</div>
+        <div id="final-point">final</div>
+    </div>
+
+    <script>
+
+        var map = new ol.Map({
+            target: 'ol-map',
+            layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            })
+            ],
+            view: new ol.View({
+            center: [14134888.1446, 4517672.9700],
+            zoom: 10
+            })
+        });
+
+        var params = {
+            LAYERS: 'pgrouting:pgrouting',
+            'TILED': true,
+            FROMAT: 'image/png'
+        };
+        var startPoint = new ol.Overlay({
+            map: map,
+            element: document.getElementById('start-point')
+        });
+        var finalPoint = new ol.Overlay({
+            map: map,
+            element: document.getElementById('final-point')
+        });
+
+        var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+
+        map.on('click', function(event) {
+            var coordinate = event.coordinate;
+            if (startPoint.getPosition() == undefined) {
+                // first click
+                startPoint.setPosition(coordinate);
+            } else if (finalPoint.getPosition() == undefined) {
+                // second click
+                finalPoint.setPosition(coordinate);
+
+                // transform the coordinates from the map projection (EPSG:3857)
+                // into the server projection (EPSG:4326)
+                var startCoord = transform(startPoint.getPosition());
+                var finalCoord = transform(finalPoint.getPosition());
+                var viewparams = [
+                'x1:' + startCoord[0], 'y1:' + startCoord[1],
+                'x2:' + finalCoord[0], 'y2:' + finalCoord[1]
+                ];
+                params.viewparams = viewparams.join(';');
+
+                // we now have the two points, create the result layer and add it to the map
+                result = new ol.layer.Image({
+                source: new ol.source.ImageWMS({
+                    url: 'http://localhost:8080/geoserver/pgrouting/wms',
+                    params: params,
+                    serverType: 'geoserver'
+                })
+                });
+                map.addLayer(result);
+                startPoint = new ol.Overlay({
+                    map: map,
+                    element: document.getElementById('start-point')
+                }); 
+                finalPoint = new ol.Overlay({
+                    map: map,
+                    element: document.getElementById('final-point')
+                });
+            }
+        });
+    </script>
+  </body>
+</html>
 ```
 
 이제 약간 느리지만 웹페이지에서 ITS Link를 따라 두 공간을 연결하는 최단 경로를 찾을 수 있습니다. :)
