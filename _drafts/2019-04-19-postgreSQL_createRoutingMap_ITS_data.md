@@ -32,7 +32,7 @@ ITS에서 정의한 노드[^1]와 링크[^2]는 해당 사이트에서 확인할
 
 이제 ITS MOCT_LINK 데이터를 넣기 위해서 postgreSQL을 설치합니다.
 설치는 해당 사이트에서 파일을 받아 순서대로 클릭만 하면 됩니다.
-딱 하나 PostGIS 관련 확장기능을 설치해야하는 점을 주의하세요. 
+딱 하나 PostGIS 관련 확장기능을 설치해야하는 점을 주의하세요.
 
 ![Stack Builder Check](/assets/postimages/PublicTransitRouting/0_1_stack_builder.png){: width="100% height ="100% .center}
 *PostGIS에 포함된 pgRouting 기능을 이용하여 경로 탐색을 수행할 겁니다.*
@@ -100,16 +100,19 @@ shp2pgsql의 각 추가 속성에 대한 설명은 [postGIS 문서](https://post
 
 ```console
 \dt
-\d link
 ```
 
 ![shell table check](/assets/postimages/PublicTransitRouting/0_4_shell_data_check.png){: .center}
 
 link 테이블이 새로 생성되었습니다.
 
+```console
+\d link
+```
+
 ![shell data check](/assets/postimages/PublicTransitRouting/0_5_shell_data_check.png){: .center}
 
-link 테이블의 속성을 확인하면 다음과 같이 나타납니다.
+link 테이블의 속성을 확인하면 위와 같이 나타납니다.
 
 ```sql
 SELECT COUNT(*) FROM public.link;
