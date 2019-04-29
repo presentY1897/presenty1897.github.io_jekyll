@@ -80,8 +80,8 @@ psql -U username -d its_sample -f link.sql
 shp2pgsql -c -s 4326 -I file tableName || psql -U username -d its_sample
 ```
 
-shp2pgsql의 각 추가 속성에 대한 설명은 [postGIS 문서](https://postgis.net/docs/using_postgis_dbmanagement.html#shp2pgsql_usage)에서 설명되어 있습니다(또 [shp2pgsql 이용해서 shp파일을 postgresql db에 얹혀보기](https://zipeya.tistory.com/entry/shp2pgsql-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-shp%ED%8C%8C%EC%9D%BC%EC%9D%84-postgresql-db%EC%97%90-%EC%96%B9%ED%98%80%EB%B3%B4%EA%B8%B0)에서도 잘 설명하고 있습니다). 예시의 옵션과 변수는 다음과 같습니다.
-마지막의 '> link.sql'은 산출물을 link.sql으로 저장하라는 겁니다.
+shp2pgsql의 각 추가 속성에 대한 설명은 [postGIS 문서](https://postgis.net/docs/using_postgis_dbmanagement.html#shp2pgsql_usage)에서 설명되어 있습니다(또 [shp2pgsql 이용해서 shp파일을 postgresql db에 얹혀보기](https://zipeya.tistory.com/entry/shp2pgsql-%EC%9D%B4%EC%9A%A9%ED%95%B4%EC%84%9C-shp%ED%8C%8C%EC%9D%BC%EC%9D%84-postgresql-db%EC%97%90-%EC%96%B9%ED%98%80%EB%B3%B4%EA%B8%B0)에서도 잘 설명하고 있습니다). 예시에서 사용한 옵션과 변수는 다음과 같습니다.
+마지막의 '> link.sql'은 산출물을 link.sql으로 저장하라는 의미입니다.
 
 |이름|설명|
 |-------|-------|
@@ -94,43 +94,30 @@ shp2pgsql의 각 추가 속성에 대한 설명은 [postGIS 문서](https://post
 
 ~~-D 벌크 입력시 오류가 발생하는 데 이유는 아직 찾지 못했습니다.~~
 
-### 인코딩
-
-다만 shp2pgsql을 이용할 때 인코딩이 불일치하여 문제가 생기는 경우가 있습니다.
-shp2pgsql을 사용하는 cmd창과 postgreSQL 서버의 인코딩이 차이가 날 경우를 주의해야합니다.
-만약 두 인코딩이 다르다면 데이터가 정상적으로 입력되지 않을 수 있습니다.
-
-cmd의 인코딩 변경
-
-```console
-chcp
-```
-
-PostgreSQL의 인코딩 변경법
-
-shellcommand에서 입력
-
-```consonle
-SHOW SERVER_ENCODING;
-SHOW CLIENT_ENCODING;
-```
-
 ## 데이터 확인
 
 최종적으로 데이터의 입력이 문제 없이 이루어졌다면, shell이나 pgadmin을 통해서 입력한 데이터를 확인할 수 있습니다.
 
-```
+```console
 \dt
 \d link
 ```
 
-![shell data]()
-shell으로 입력한 link table 확인
+![shell table check](/assets/postimages/PublicTransitRouting/0_4_shell_data_check.png){: .center}
 
-![pgadmin4]()
-Pgadmin에서 입력한 link table 확인
+link 테이블이 새로 생성되었습니다.
 
-만약에 동일한 시점의 데이터를 받으셨다면 총 개의 link가 들어가 있을 겁니다.
+![shell data check](/assets/postimages/PublicTransitRouting/0_5_shell_data_check.png){: .center}
+
+link 테이블의 속성을 확인하면 다음과 같이 나타납니다.
+
+```sql
+SELECT COUNT(*) FROM public.link;
+```
+
+![shell row count check](/assets/postimages/PublicTransitRouting/0_6_shell_data_check.png){: .center}
+
+만약에 동일한 시점의 데이터를 받으셨다면 총 45663개의 link가 들어가 있을 겁니다.
 
 ## link 데이터 전처리
 
@@ -138,8 +125,8 @@ Pgadmin에서 입력한 link table 확인
 pgRouting에는 dijkstra와 a*를 비롯한 여러 경로 탐색 알고리즘들이 구현되어 있습니다.
 이 함수들은 공통적으로 graph를 이용하고 있는데, link 테이블을 graph에 맞춰 변환할 필요가 있습니다.
 
-만약에 우리가 가진 link가 상호간의 연결에 관한 데이터 없이 단순히 형상만 존재한다면, pgRouting의 [pgr_createTopology](https://docs.pgrouting.org/2.0/en/src/common/doc/functions/create_topology.html)(혹은 [Create a Network Topology](https://workshop.pgrouting.org/0.6.1/en/chapters/topology.html)를 참고하세요)가 필요합니다.
-하지만 link에는 링크의 시작 노드와 끝 노드에 관한 정보가 있으니 이에 관한 인덱스와 길이 열만 변환해줍시다.
+만약에 지금까지 다루던 link와 달리 vertex의 양 끝과 노드의 연결에 관한 데이터가 없이 단순히 형상만 존재한다면, pgRouting의 [pgr_createTopology](https://docs.pgrouting.org/2.0/en/src/common/doc/functions/create_topology.html)(혹은 [Create a Network Topology](https://workshop.pgrouting.org/0.6.1/en/chapters/topology.html)를 참고하세요)가 필요합니다.
+하지만 link에는 링크의 시작 노드와 끝 노드에 관한 정보가 있으니 이에 관한 인덱스와 길이 열만 변환해줍니다.
 
 ```sql
 ALTER TABLE link ALTER COLUMN;
