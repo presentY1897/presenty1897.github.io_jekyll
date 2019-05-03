@@ -7,7 +7,7 @@ keywords: "postgreSQL, pgRouting, ITS, GeoSERVER, GIS"
 tags: postgreSQL
 ---
 
-## ITS 데이터 가져오기
+# ITS 데이터 가져오기
 
 처음으로 할 일은 ITS 데이터를 가져와 데이터베이스에 넣는 일입니다.
 우선은 [ITS 표준노드링크 사이트][ITS데이터]에서 가장 최신의 전국표준노드링크 데이터를 받습니다.

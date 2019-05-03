@@ -12,7 +12,7 @@ tags: postgreSQL
 이제 경로 탐색 알고리즘에서 가장 기초적인 dijkstra를 사용해봅시다.
 
 ```sql
-SELECT pg_dijkstra()
+SELECT pgr_dijkstra()
 ```
 
 이제 잘 들어가는지 확인해봐야죠.
@@ -31,6 +31,7 @@ QGIS에서 구축한 link 테이블을 연결하고, 필터에 다음 구문을 
                 30, 60, false, false) a LEFT JOIN link b ON (a.id2 = b.gid)
 )
 ```
+
 [!쿼리 입력 이미지]()
 [!결과 이미지]()
 
