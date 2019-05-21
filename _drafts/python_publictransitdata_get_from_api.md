@@ -34,3 +34,9 @@ node js를 기반으로 restful api 데이터 가져오기는 실패.
 * [기본 문서](https://postgis.net/docs/PostGIS_Special_Functions_Index.html#NewFunctions)
 * [postgreSQL insert perforamance link](https://stackoverflow.com/questions/12206600/how-to-speed-up-insertion-performance-in-postgresql)
 * [PostgreSQL function basic](https://www.joeconway.com/presentations/function_basics.pdf)
+* [빠른 SQL 쿼리 작성시 참고할 사항들](http://www.itworld.co.kr/print/105792)
+
+## 5. CORS using GeoServer
+
+* [Add file and ext](https://devhoma.tistory.com/108)
+* [config geoserver web.xml file](http://www.gisdeveloper.co.kr/?p=6162) recommended
