@@ -31,7 +31,7 @@ ITS에서 정의한 노드[^1]와 링크[^2]는 해당 사이트에서 확인할
 
 이제 ITS MOCT_LINK 데이터를 넣기 위해서 postgreSQL을 설치합니다.
 설치는 해당 사이트에서 파일을 받아 순서대로 클릭만 하면 됩니다.
-딱 하나 PostGIS 관련 확장기능을 설치해야하는 점을 주의하세요.
+딱 하나 PostGIS 관련 확장기능을 설치해야하는 점을 주의하세요.(stack builder에서 postgis extension 관련 기능을 설치해주세요.)
 
 ![Stack Builder Check](/assets/postimages/PublicTransitRouting/0_1_stack_builder.png){: width="100% height ="100% .center}
 *PostGIS에 포함된 pgRouting 기능을 이용하여 경로 탐색을 수행할 겁니다.*
