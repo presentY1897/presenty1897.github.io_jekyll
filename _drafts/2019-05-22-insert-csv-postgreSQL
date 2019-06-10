@@ -1,0 +1,10 @@
+---
+layout: post
+title: "postgreSQL에 csv 파일 넣기"
+description: "앞서 구축한 link 데이터를 이용하여 pgRouting의 경로를 탐색"
+comments: true
+keywords: "postgreSQL, easy"
+tags: postgreSQL, easy
+---
+
+## 
