@@ -25,7 +25,7 @@ Javascript에서 변수는 선언, 초기화, 할당의 과정을 거친다.
 
 ---
 
-# 참조
+#### 참조
 
 1. [Mozilla, Hoisting](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)
 1. [변수 선언 초기화 할당](https://velog.io/@tess/%EB%B3%80%EC%88%98-%EC%84%A0%EC%96%B8-%EC%B4%88%EA%B8%B0%ED%99%94-%ED%95%A0%EB%8B%B9)

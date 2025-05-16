@@ -36,10 +36,10 @@ permalink: /docs/concepts/browser/populating-the-page/
 
 ---
 
-#### 참조(Reference)
+#### 참조
 
 [Mozilla, Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work)
 
-#### 연관문서(Related)
+#### 연관문서
 
 [웹 성능에서 주요한 두 가지 문제(Two major issues in web performance are issues)](/questions/two-major-problems-of-web-performance.md)
