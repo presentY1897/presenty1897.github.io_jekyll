@@ -9,7 +9,6 @@ parent: Concept
 ### TO-DO
 
 1. custom hook
-1. functional component
 1. hook
 1. life cycle
 1. use context
