@@ -8,7 +8,6 @@ parent: Concept
 
 ### TO-DO
 
-1. class component
 1. custom hook
 1. functional component
 1. hook
