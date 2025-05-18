@@ -38,7 +38,7 @@ permalink: /docs/concepts/browser/populating-the-page/
 
 #### 참조
 
-[Mozilla, Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work)
+1. [Mozilla, Populating the page: how browsers work](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work)
 
 #### 연관문서
 
