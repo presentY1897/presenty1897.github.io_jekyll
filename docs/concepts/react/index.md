@@ -18,3 +18,5 @@ parent: Concept
 1. use ref
 1. use state
 1. virtual dom
+1. render tree
+1. state update que
