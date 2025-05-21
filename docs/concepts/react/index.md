@@ -20,3 +20,4 @@ parent: Concept
 1. virtual dom
 1. render tree
 1. state update que
+1. [render and commit](https://ko.react.dev/learn/render-and-commit)
